@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.watchparty.app.model.WatchPartyUiState
@@ -134,7 +135,8 @@ fun RoomScreen(
         }
 
         // Verification progress
-        if (uiState.verificationProgress != null) {
+        val verificationProgress = uiState.verificationProgress
+        if (verificationProgress != null) {
             Surface(
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -149,11 +151,11 @@ fun RoomScreen(
                     Text("Verifying Local Movie File...")
                     Spacer(modifier = Modifier.height(12.dp))
                     LinearProgressIndicator(
-                        progress = { uiState.verificationProgress },
+                        progress = verificationProgress,
                         modifier = Modifier.width(200.dp)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text("${(uiState.verificationProgress * 100).toInt()}%")
+                    Text("${(verificationProgress * 100).toInt()}%")
                 }
             }
         } else if (uiState.currentVideoUri != null && !uiState.isFileVerified) {
@@ -298,10 +300,9 @@ fun HostControlsOverlay(
     }
 
     if (isHost && isFileVerified) {
+        // Alignment and padding are already applied by the caller via `modifier`
         Surface(
-            modifier = modifier
-                .align(Alignment.BottomCenter)
-                .padding(16.dp),
+            modifier = modifier,
             color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
             shape = MaterialTheme.shapes.medium
         ) {
