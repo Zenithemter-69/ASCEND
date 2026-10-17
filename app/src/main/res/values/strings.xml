@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WatchParty</string>
+    <string name="create_room">Create Room</string>
+    <string name="join_room">Join Room</string>
+    <string name="room_code">Room Code</string>
+    <string name="select_movie">Select Movie</string>
+    <string name="verifying_file">Verifying file…</string>
+    <string name="waiting_for_host">Waiting for host…</string>
+    <string name="ready">Ready</string>
+    <string name="not_ready">Not Ready</string>
+    <string name="start_playback">Start Playback</string>
+</resources>
