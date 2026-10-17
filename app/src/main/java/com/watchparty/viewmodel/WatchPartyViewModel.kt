@@ -246,10 +246,8 @@ class WatchPartyViewModel(application: Application) : AndroidViewModel(applicati
                     }
                 }
                 "participant_buffering" -> {
-                    message.participantId?.let { participantId ->
-                        _uiState.update {
-                            it.copy(errorMessage = "Participant $participantId is buffering, playback may be affected")
-                        }
+                    _uiState.update {
+                        it.copy(errorMessage = "A participant is buffering, playback may be affected")
                     }
                 }
                 "file_hash_mismatch" -> {
