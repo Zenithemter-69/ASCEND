@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import com.watchparty.app.model.ConnectionStatus
-import com.watchparty.app.model.Participant
 import com.watchparty.app.model.WatchPartyUiState
 import com.watchparty.app.network.*
 import com.watchparty.app.sync.SyncEngine
@@ -147,12 +146,6 @@ class WatchPartyViewModel(application: Application) : AndroidViewModel(applicati
     fun pause() {
         if (_uiState.value.isHost) {
             sendMessage(ClientMessage.Pause())
-        }
-    }
-
-    fun seek(position: Long) {
-        if (_uiState.value.isHost) {
-            sendMessage(ClientMessage.Seek(position = position))
         }
     }
 
