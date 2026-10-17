@@ -96,5 +96,6 @@ data class ServerMessage(
     val position: Long? = null,
     val serverTime: Long? = null,
     val clientTime: Long? = null,
-    val error: String? = null
+    val error: String? = null,
+    val participantId: String? = null
 )
