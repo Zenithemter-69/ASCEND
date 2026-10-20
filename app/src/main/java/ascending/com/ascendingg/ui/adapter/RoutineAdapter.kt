@@ -35,13 +35,14 @@ class RoutineAdapter : ListAdapter<RoutineItem, RoutineViewHolder>(DIFF_CALLBACK
 class RoutineViewHolder(private val binding: ItemRoutineBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: RoutineItem) {
-        binding.apply {
-            tvTaskName.text = item.name
-            tvTime.text = item.timeSlot
-            checkBoxCompleted.isChecked = item.isCompleted
-            checkBoxCompleted.setOnCheckedChangeListener { _, isChecked ->
-                // Update completion status in real app
+            binding.apply {
+                tvTaskName.text = item.name
+                tvTime.text = item.timeSlot
+                checkBoxCompleted.setOnCheckedChangeListener(null)
+                checkBoxCompleted.isChecked = item.isCompleted
+                checkBoxCompleted.setOnCheckedChangeListener { _, isChecked ->
+                    // Update completion status in real app
+                }
             }
-        }
     }
 }

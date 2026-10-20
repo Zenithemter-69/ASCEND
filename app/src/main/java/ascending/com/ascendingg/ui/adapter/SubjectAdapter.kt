@@ -39,10 +39,14 @@ class SubjectViewHolder(private val binding: ItemSubjectBinding) :
         binding.apply {
             tvName.text = subject.name
             tvChapters.text = "${subject.chapters} chapters"
-            tvHours.text = "${subject.hoursToday}h today"
+            tvHours.text = "${subject.hoursToday}m today"
             // Color-code progress indicator
-            val color = Color.parseColor(subject.colorCode)
-            viewColorIndicator.setBackgroundColor(color)
+            try {
+                val color = Color.parseColor(subject.colorCode)
+                viewColorIndicator.setBackgroundColor(color)
+            } catch (e: Exception) {
+                viewColorIndicator.setBackgroundColor(Color.GRAY)
+            }
         }
     }
 }

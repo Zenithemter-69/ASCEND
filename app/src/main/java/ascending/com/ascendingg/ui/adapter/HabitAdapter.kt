@@ -28,6 +28,7 @@ class HabitAdapter(
             binding.apply {
                 tvHabitName.text = habit.name
                 tvCategory.text = "${habit.category} • ${habit.timeOfDay}"
+                cbHabit.setOnCheckedChangeListener(null)
                 cbHabit.isChecked = habit.lastCompleted > 0
                 cbHabit.setOnCheckedChangeListener { _, isChecked ->
                     if (isChecked) onHabitClick(habit.id)
