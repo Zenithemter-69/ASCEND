@@ -12,9 +12,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
- * Tracks location-based metrics like distance traveled and steps.
+ * Tracks location-based metrics like distance traveled, steps, and current location.
  * Uses FusedLocationProviderClient from Google Play Services.
  */
 class LocationTracker(private val context: Context) {
@@ -36,52 +39,86 @@ class LocationTracker(private val context: Context) {
         }
     }
 
+    // State
+    private val _currentLocation = MutableStateFlow<Location?>(null)
+    val currentLocation: Flow<Location?> = _currentLocation
+        .distinctUntilChanged()
+
+    private var _totalDistanceMeters = 0f
+    private var _stepCount = 0
+    private var lastLocation: Location? = null
+
+    val totalDistanceMeters: Float
+        get() = _totalDistanceMeters
+
+    val stepCount: Int
+        get() = _stepCount
+
+    // Distance per step estimation (average human step ~0.75m)
+    private val DISTANCE_PER_STEP = 0.75f
+
     /**
-     * Flow that emits new location readings as they become available.
-     * Emits only the last known location initially, then updates.
+     * Start tracking location and calculating steps/distance.
+     * Returns a Flow that emits the current location.
      */
-    val locationFlow: Flow<Location?> = generate {
-        if (hasLocationPermission()) {
-            // Try to get last known location immediately
-            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                if (location != null && isActive) {
-                    emit(location)
-                }
+    fun startTracking(): Flow<Location?> {
+        if (!hasLocationPermission()) {
+            return flow { }
+        }
+
+        // Get last known location
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                _currentLocation.value = location
+                lastLocation = location
             }
         }
 
-        // Continuously request location updates
-        while (isActive) {
-            try {
-                val locationRequest = android.location.LocationRequest.Builder(
-                    priority = android.location.LocationRequest.PriORITY_HIGH_ACCURACY,
-                    intervalMillis = 5000
-                ).build()
+        return generate {
+            while (isActive) {
+                try {
+                    val locationRequest = android.location.LocationRequest.Builder(
+                        priority = android.location.LocationRequest.PRIORITY_HIGH_ACCURACY,
+                        intervalMillis = 5000
+                    ).build()
 
-                fusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    object : android.location.LocationCallback() {
+                    val callback = object : android.location.LocationCallback() {
                         override fun onLocationResult(locationResult: android.location.LocationResult) {
                             locationResult.locations.forEach { location ->
                                 if (location != null && isActive) {
-                                    emit(location)
+                                    // Update distance and steps
+                                    if (lastLocation != null) {
+                                        val distance = lastLocation!!.distanceTo(location)
+                                        if (distance > 0) {
+                                            _totalDistanceMeters += distance
+                                            // Estimate steps from distance
+                                            val newSteps = (distance / DISTANCE_PER_STEP).toInt()
+                                            _stepCount += newSteps
+                                        }
+                                    }
+                                    lastLocation = location
+                                    _currentLocation.value = location
                                 }
                             }
                         }
-                    },
-                    null /* mainLooper */
-                )
+                    }
 
-                // Wait a bit before stopping, then stop to save battery
-                Thread.sleep(60000)
-                fusedLocationClient.removeLocationUpdates(
-                    object : android.location.LocationCallback() {}
-                )
-                break
-            } catch (e: SecurityException) {
-                // Permission denied or other error
-                break
+                    fusedLocationClient.requestLocationUpdates(locationRequest, callback, null)
+
+                    // Wait and then clean up
+                    Thread.sleep(60000)
+                    fusedLocationClient.removeLocationUpdates(callback)
+                    break
+                } catch (e: SecurityException) {
+                    break
+                }
             }
         }
+    }
+
+    fun resetStats() {
+        _totalDistanceMeters = 0f
+        _stepCount = 0
+        lastLocation = null
     }
 }

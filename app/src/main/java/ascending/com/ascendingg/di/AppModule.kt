@@ -4,6 +4,7 @@ import android.content.Context
 import ascending.com.ascendingg.data.database.AppDatabase
 import ascending.com.ascendingg.data.repository.AIRepository
 import ascending.com.ascendingg.data.repository.HabitRepository
+import ascending.com.ascendingg.data.tracking.LocationTracker
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,4 +30,9 @@ object AppModule {
     @Singleton
     fun provideAIRepository(@ApplicationContext application: Context): AIRepository =
         AIRepository(application)
+
+    @Provides
+    @Singleton
+    fun provideLocationTracker(@ApplicationContext application: Context): LocationTracker =
+        LocationTracker(application)
 }

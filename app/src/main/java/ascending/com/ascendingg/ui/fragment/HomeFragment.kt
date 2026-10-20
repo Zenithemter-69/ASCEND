@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import ascending.com.ascendingg.R
 import ascending.com.ascendingg.data.model.Habit
+import ascending.com.ascendingg.data.tracking.LocationTracker
 import ascending.com.ascendingg.databinding.FragmentHomeBinding
 import ascending.com.ascendingg.ui.adapter.HabitAdapter
 import ascending.com.ascendingg.ui.viewmodel.HomeViewModel
@@ -30,6 +31,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var habitAdapter: HabitAdapter
+    private val locationTracker: LocationTracker by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +46,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         setupRecyclerView()
         bindViewModel()
         setGreeting()
+        startStepTracking()
     }
 
     private fun setupRecyclerView() {
@@ -65,6 +68,29 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
         }
+    }
+
+    private fun startStepTracking() {
+        // Start location tracking for step counting
+        lifecycleScope.launch {
+            locationTracker.startTracking().collect()
+        }
+
+        // Update step count display periodically
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                locationTracker.currentLocation.collect { location ->
+                    updateStepDisplay()
+                }
+            }
+        }
+    }
+
+    private fun updateStepDisplay() {
+        val steps = locationTracker.stepCount
+        val distanceKm = locationTracker.totalDistanceMeters / 1000f
+        binding.tvStepCount.text = "$steps steps"
+        binding.tvDistance.text = String.format("%.2f km", distanceKm)
     }
 
     private fun updateProgress(habits: List<Habit>) {

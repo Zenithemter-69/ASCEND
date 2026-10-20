@@ -4,13 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import ascending.com.ascendingg.data.model.Habit
 import ascending.com.ascendingg.data.repository.HabitRepository
+import ascending.com.ascendingg.data.tracking.LocationTracker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val habitRepository: HabitRepository
+    private val habitRepository: HabitRepository,
+    val locationTracker: LocationTracker
 ) : ViewModel() {
 
     val todaysHabits = habitRepository.getAllHabits()
