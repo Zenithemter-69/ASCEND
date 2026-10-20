@@ -3,8 +3,10 @@ package com.watchparty.app.network
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-val json = Json { ignoreUnknownKeys = true }
-
+val json = Json {
+    ignoreUnknownKeys = true
+    encodeDefaults = true
+}
 // Client -> Server messages
 @Serializable
 sealed class ClientMessage {
@@ -96,5 +98,6 @@ data class ServerMessage(
     val position: Long? = null,
     val serverTime: Long? = null,
     val clientTime: Long? = null,
-    val error: String? = null
+    val error: String? = null,
+    val participantId: String? = null
 )
