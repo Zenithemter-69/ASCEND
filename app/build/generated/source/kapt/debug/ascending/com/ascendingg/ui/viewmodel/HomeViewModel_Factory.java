@@ -2,7 +2,6 @@
 package ascending.com.ascendingg.ui.viewmodel;
 
 import ascending.com.ascendingg.data.repository.HabitRepository;
-import ascending.com.ascendingg.data.tracking.LocationTracker;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -21,26 +20,20 @@ import javax.inject.Provider;
 public final class HomeViewModel_Factory implements Factory<HomeViewModel> {
   private final Provider<HabitRepository> habitRepositoryProvider;
 
-  private final Provider<LocationTracker> locationTrackerProvider;
-
-  public HomeViewModel_Factory(Provider<HabitRepository> habitRepositoryProvider,
-      Provider<LocationTracker> locationTrackerProvider) {
+  public HomeViewModel_Factory(Provider<HabitRepository> habitRepositoryProvider) {
     this.habitRepositoryProvider = habitRepositoryProvider;
-    this.locationTrackerProvider = locationTrackerProvider;
   }
 
   @Override
   public HomeViewModel get() {
-    return newInstance(habitRepositoryProvider.get(), locationTrackerProvider.get());
+    return newInstance(habitRepositoryProvider.get());
   }
 
-  public static HomeViewModel_Factory create(Provider<HabitRepository> habitRepositoryProvider,
-      Provider<LocationTracker> locationTrackerProvider) {
-    return new HomeViewModel_Factory(habitRepositoryProvider, locationTrackerProvider);
+  public static HomeViewModel_Factory create(Provider<HabitRepository> habitRepositoryProvider) {
+    return new HomeViewModel_Factory(habitRepositoryProvider);
   }
 
-  public static HomeViewModel newInstance(HabitRepository habitRepository,
-      LocationTracker locationTracker) {
-    return new HomeViewModel(habitRepository, locationTracker);
+  public static HomeViewModel newInstance(HabitRepository habitRepository) {
+    return new HomeViewModel(habitRepository);
   }
 }
