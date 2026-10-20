@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ascending.com.ascendingg.R
-import ascending.com.ascendingg.data.model.Exercise
 import ascending.com.ascendingg.databinding.ItemExerciseBinding
+import ascending.com.ascendingg.data.model.Exercise
 
-class ExerciseAdapter : ListAdapter<Exercise, ExerciseViewHolder>(DIFF_CALLBACK) {
+class ExerciseAdapter(
+    private val onExerciseClick: (Long) -> Unit
+) : ListAdapter<Exercise, ExerciseViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Exercise>() {
@@ -52,7 +54,7 @@ class ExerciseViewHolder(private val binding: ItemExerciseBinding) :
             checkBoxCompleted.setOnCheckedChangeListener(null)
             checkBoxCompleted.isChecked = exercise.completed
             checkBoxCompleted.setOnCheckedChangeListener { _, isChecked ->
-                // TODO: Update database state
+                if (isChecked) onExerciseClick(exercise.id)
             }
         }
     }

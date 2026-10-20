@@ -48,8 +48,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupRecyclerView() {
         habitAdapter = HabitAdapter { habitId ->
-            // Handle habit toggle
-            // In full implementation, update DB + UI
+            viewModel.incrementStreak(habitId, System.currentTimeMillis())
         }
         binding.habitsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())

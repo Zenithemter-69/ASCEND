@@ -10,7 +10,7 @@ import ascending.com.ascendingg.databinding.ItemHabitBinding
 
 class HabitAdapter(
     private val onHabitClick: (Long) -> Unit
-) : ListAdapter<Habit, HabitAdapter.HabitViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<Habit, HabitViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Habit>() {

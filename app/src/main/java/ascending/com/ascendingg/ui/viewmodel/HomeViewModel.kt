@@ -18,4 +18,8 @@ class HomeViewModel @Inject constructor(
         .map { habits ->
             habits.filter { it.isActive }.take(6)
         }
+
+    fun incrementStreak(habitId: Long, timestamp: Long) {
+        habitRepository.incrementStreak(habitId, timestamp)
+    }
 }

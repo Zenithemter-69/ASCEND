@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class FitnessFragment : Fragment(R.layout.fragment_fitness) {
 
     private var _binding: FragmentFitnessBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
     private lateinit var exerciseAdapter: ExerciseAdapter
 
     private val sampleExercises = listOf(
@@ -72,7 +72,9 @@ class FitnessFragment : Fragment(R.layout.fragment_fitness) {
     }
 
     private fun setupRecyclerView() {
-        exerciseAdapter = ExerciseAdapter()
+        exerciseAdapter = ExerciseAdapter { exerciseId ->
+            // TODO: ViewModel call to persist workout state
+        }
         binding.recyclerViewExercises.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = exerciseAdapter

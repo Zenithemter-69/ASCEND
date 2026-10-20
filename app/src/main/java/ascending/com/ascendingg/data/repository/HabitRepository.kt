@@ -15,6 +15,7 @@ class HabitRepository @Inject constructor(
 ) {
     private val habitDao = database.habitDao()
 
+    // Fetch all habits as LiveData (observed by ViewModel/HomeFragment)
     fun getAllHabits(): LiveData<List<Habit>> = habitDao.getAllHabits()
         .map { it.map {
             Habit(
@@ -23,10 +24,13 @@ class HabitRepository @Inject constructor(
             )
         } }.asLiveData()
 
+    // Insert a new habit (e.g., from UI creation flow)
     suspend fun addHabit(habit: HabitEntity) = habitDao.insertAll(habit)
 
+    // Update an existing habit (e.g., when completion state changes)
     suspend fun updateHabit(habit: HabitEntity) = habitDao.update(habit)
 
+    // Increment the completion streak and set lastCompleted timestamp
     suspend fun incrementStreak(id: Long, timestamp: Long) =
         habitDao.incrementStreak(id, timestamp)
 }
