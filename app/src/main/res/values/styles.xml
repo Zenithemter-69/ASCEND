@@ -1,0 +1,32 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Ascendingg" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/accent_primary</item>
+        <item name="colorPrimaryVariant">@color/accent_primary</item>
+        <item name="colorOnPrimary">@color/bg_primary</item>
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/accent_secondary</item>
+        <item name="colorSecondaryVariant">@color/accent_secondary</item>
+        <item name="colorOnSecondary">@color/bg_primary</item>
+        <!-- Background -->
+        <item name="android:colorBackground">@color/bg_primary</item>
+        <item name="colorSurface">@color/bg_secondary</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/bg_primary</item>
+        <item name="android:navigationBarColor">@color/bg_primary</item>
+    </style>
+
+    <!-- Home screen progress bar style -->
+    <style name="Widget.Ascendingg.CircularProgressIndicator" parent="Widget.Material3.CircularProgressIndicator">
+        <item name="indeterminateStrokeWidth">6dp</item>
+        <item name="trackThickness">6dp</item>
+    </style>
+
+    <!-- Chat message bubble styles -->
+    <style name="Widget.Ascendingg.ChatBubble" parent="Widget.Material3.CardView">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+</resources>
