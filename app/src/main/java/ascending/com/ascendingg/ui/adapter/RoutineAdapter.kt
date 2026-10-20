@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ascending.com.ascendingg.data.model.RoutineItem
 import ascending.com.ascendingg.databinding.ItemRoutineBinding
 
-class RoutineAdapter : ListAdapter<RoutineItem, RoutineViewHolder>(DIFF_CALLBACK) {
+class RoutineAdapter(
+    private val onRoutineClick: (Long) -> Unit
+) : ListAdapter<RoutineItem, RoutineViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<RoutineItem>() {
@@ -35,14 +37,14 @@ class RoutineAdapter : ListAdapter<RoutineItem, RoutineViewHolder>(DIFF_CALLBACK
 class RoutineViewHolder(private val binding: ItemRoutineBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: RoutineItem) {
-            binding.apply {
-                tvTaskName.text = item.name
-                tvTime.text = item.timeSlot
-                checkBoxCompleted.setOnCheckedChangeListener(null)
-                checkBoxCompleted.isChecked = item.isCompleted
-                checkBoxCompleted.setOnCheckedChangeListener { _, isChecked ->
-                    // Update completion status in real app
-                }
+        binding.apply {
+            tvTaskName.text = item.name
+            tvTime.text = item.timeSlot
+            checkBoxCompleted.setOnCheckedChangeListener(null)
+            checkBoxCompleted.isChecked = item.isCompleted
+            checkBoxCompleted.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) onRoutineClick(item.id)
             }
+        }
     }
 }

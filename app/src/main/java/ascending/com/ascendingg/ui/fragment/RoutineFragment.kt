@@ -44,7 +44,9 @@ class RoutineFragment : Fragment(R.layout.fragment_routine) {
     }
 
     private fun setupRecyclerView() {
-        routineAdapter = RoutineAdapter()
+        routineAdapter = RoutineAdapter { routineId ->
+            // TODO: ViewModel call to persist routine state
+        }
         binding.recyclerViewRoutine.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = routineAdapter
