@@ -5,9 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import ascending.com.ascendingg.R
 import ascending.com.ascendingg.databinding.FragmentInsightsBinding
-import dagger.hilt.android.AndroidEntryPoint
+import ascending.com.ascendingg.ui.viewmodel.InsightsViewModel
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.BarDataSet
@@ -15,6 +19,9 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,6 +30,7 @@ class InsightsFragment : Fragment(R.layout.fragment_insights) {
 
     private var _binding: FragmentInsightsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: InsightsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,21 +42,32 @@ class InsightsFragment : Fragment(R.layout.fragment_insights) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupCharts()
+        bindViewModel()
         setDateRange()
     }
 
-    private fun setupCharts() {
-        setupHabitCompletionChart()
-        setupStudyHoursChart()
-        setupProgressPhotos()
+    private fun bindViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.habitCompletionData.collect { habitData ->
+                    setupHabitCompletionChart(habitData)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.studyHoursData.collect { studyData ->
+                    setupStudyHoursChart(studyData)
+                }
+            }
+        }
     }
 
-    private fun setupHabitCompletionChart() {
-        val entries = listOf(
-            BarEntry(0f, 80f), BarEntry(1f, 90f), BarEntry(2f, 75f),
-            BarEntry(3f, 85f), BarEntry(4f, 95f), BarEntry(5f, 70f), BarEntry(6f, 88f)
-        )
+    private fun setupHabitCompletionChart(habitData: List<InsightsViewModel.BarEntryData>) {
+        val entries = habitData.map { data ->
+            BarEntry(data.x, data.y)
+        }
 
         val dataSet = BarDataSet(entries, "Habit Completion (%)").apply {
             color = android.graphics.Color.parseColor("#C5F36A")
@@ -62,17 +81,24 @@ class InsightsFragment : Fragment(R.layout.fragment_insights) {
             axisLeft.axisMinimum = 0f
             axisLeft.axisMaximum = 100f
             axisRight.isEnabled = false
+            // Set x-axis labels
+            xAxis.valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                override fun getAxisLabel(value: Float, axis: com.github.mikephil.charting.components.AxisBase?): String {
+                    val entry = habitData.firstOrNull { it.x == value }
+                    return entry?.label ?: ""
+                }
+            }
+            xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
             animateY(700, Easing.EaseInOutQuad)
             data = BarData(dataSet)
             invalidate()
         }
     }
 
-    private fun setupStudyHoursChart() {
-        val entries = listOf(
-            Entry(0f, 2f), Entry(1f, 3f), Entry(2f, 2.5f),
-            Entry(3f, 4f), Entry(4f, 3.5f), Entry(5f, 2f), Entry(6f, 3f)
-        )
+    private fun setupStudyHoursChart(studyData: List<InsightsViewModel.LineEntryData>) {
+        val entries = studyData.map { data ->
+            Entry(data.x, data.y)
+        }
 
         val dataSet = LineDataSet(entries, "Study Hours").apply {
             color = android.graphics.Color.parseColor("#4D9FFF")
@@ -88,6 +114,14 @@ class InsightsFragment : Fragment(R.layout.fragment_insights) {
             xAxis.granularity = 1f
             axisLeft.axisMinimum = 0f
             axisRight.isEnabled = false
+            // Set x-axis labels
+            xAxis.valueFormatter = object : com.github.mikephil.charting.formatter.ValueFormatter() {
+                override fun getAxisLabel(value: Float, axis: com.github.mikephil.charting.components.AxisBase?): String {
+                    val entry = studyData.firstOrNull { it.x == value }
+                    return entry?.label ?: ""
+                }
+            }
+            xAxis.position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
             animateXY(700, 700, Easing.EaseInOutQuad)
             data = LineData(dataSet)
             invalidate()

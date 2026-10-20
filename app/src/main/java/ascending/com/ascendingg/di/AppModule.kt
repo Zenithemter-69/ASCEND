@@ -4,6 +4,7 @@ import android.content.Context
 import ascending.com.ascendingg.data.database.AppDatabase
 import ascending.com.ascendingg.data.repository.AIRepository
 import ascending.com.ascendingg.data.repository.HabitRepository
+import ascending.com.ascendingg.data.repository.WorkoutRepository
 import ascending.com.ascendingg.data.tracking.LocationTracker
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,11 @@ object AppModule {
     @Singleton
     fun provideHabitRepository(database: AppDatabase): HabitRepository =
         HabitRepository(database)
+
+    @Provides
+    @Singleton
+    fun provideWorkoutRepository(database: AppDatabase): WorkoutRepository =
+        WorkoutRepository(database)
 
     @Provides
     @Singleton
