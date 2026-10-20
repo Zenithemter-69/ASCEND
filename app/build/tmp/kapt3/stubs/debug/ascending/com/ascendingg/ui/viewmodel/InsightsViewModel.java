@@ -1,6 +1,6 @@
 package ascending.com.ascendingg.ui.viewmodel;
 
-@kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u00000\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\u0010 \n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0005\b\u0007\u0018\u00002\u00020\u0001:\u0003\u0010\u0011\u0012B\u0017\b\u0007\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0005\u00a2\u0006\u0002\u0010\u0006R\u001d\u0010\u0007\u001a\u000e\u0012\n\u0012\b\u0012\u0004\u0012\u00020\n0\t0\b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u000b\u0010\fR\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u001d\u0010\r\u001a\u000e\u0012\n\u0012\b\u0012\u0004\u0012\u00020\u000e0\t0\b\u00a2\u0006\b\n\u0000\u001a\u0004\b\u000f\u0010\fR\u000e\u0010\u0004\u001a\u00020\u0005X\u0082\u0004\u00a2\u0006\u0002\n\u0000\u00a8\u0006\u0013"}, d2 = {"Lascending/com/ascendingg/ui/viewmodel/InsightsViewModel;", "Landroidx/lifecycle/ViewModel;", "habitRepository", "Lascending/com/ascendingg/data/repository/HabitRepository;", "workoutRepository", "Lascending/com/ascendingg/data/repository/WorkoutRepository;", "(Lascending/com/ascendingg/data/repository/HabitRepository;Lascending/com/ascendingg/data/repository/WorkoutRepository;)V", "habitCompletionData", "Lkotlinx/coroutines/flow/Flow;", "", "Lascending/com/ascendingg/ui/viewmodel/InsightsViewModel$BarEntryData;", "getHabitCompletionData", "()Lkotlinx/coroutines/flow/Flow;", "studyHoursData", "Lascending/com/ascendingg/ui/viewmodel/InsightsViewModel$LineEntryData;", "getStudyHoursData", "BarEntryData", "InsightData", "LineEntryData", "app_debug"})
+@kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u0000\u0018\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\f\b\u0007\u0018\u00002\u00020\u0001:\u0003\u000e\u000f\u0010B\u0017\b\u0007\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0005\u00a2\u0006\u0002\u0010\u0006R\u0013\u0010\u0007\u001a\u00020\b\u00a2\u0006\n\n\u0002\u0010\u000b\u001a\u0004\b\t\u0010\nR\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u0013\u0010\f\u001a\u00020\b\u00a2\u0006\n\n\u0002\u0010\u000b\u001a\u0004\b\r\u0010\nR\u000e\u0010\u0004\u001a\u00020\u0005X\u0082\u0004\u00a2\u0006\u0002\n\u0000\u00a8\u0006\u0011"}, d2 = {"Lascending/com/ascendingg/ui/viewmodel/InsightsViewModel;", "Landroidx/lifecycle/ViewModel;", "habitRepository", "Lascending/com/ascendingg/data/repository/HabitRepository;", "workoutRepository", "Lascending/com/ascendingg/data/repository/WorkoutRepository;", "(Lascending/com/ascendingg/data/repository/HabitRepository;Lascending/com/ascendingg/data/repository/WorkoutRepository;)V", "habitCompletionData", "error/NonExistentClass", "getHabitCompletionData", "()Lerror/NonExistentClass;", "Lerror/NonExistentClass;", "studyHoursData", "getStudyHoursData", "BarEntryData", "InsightData", "LineEntryData", "app_debug"})
 @dagger.hilt.android.lifecycle.HiltViewModel
 public final class InsightsViewModel extends androidx.lifecycle.ViewModel {
     @org.jetbrains.annotations.NotNull
@@ -8,9 +8,9 @@ public final class InsightsViewModel extends androidx.lifecycle.ViewModel {
     @org.jetbrains.annotations.NotNull
     private final ascending.com.ascendingg.data.repository.WorkoutRepository workoutRepository = null;
     @org.jetbrains.annotations.NotNull
-    private final kotlinx.coroutines.flow.Flow<java.util.List<ascending.com.ascendingg.ui.viewmodel.InsightsViewModel.BarEntryData>> habitCompletionData = null;
+    private final error.NonExistentClass habitCompletionData = null;
     @org.jetbrains.annotations.NotNull
-    private final kotlinx.coroutines.flow.Flow<java.util.List<ascending.com.ascendingg.ui.viewmodel.InsightsViewModel.LineEntryData>> studyHoursData = null;
+    private final error.NonExistentClass studyHoursData = null;
     
     @javax.inject.Inject
     public InsightsViewModel(@org.jetbrains.annotations.NotNull
@@ -20,12 +20,12 @@ public final class InsightsViewModel extends androidx.lifecycle.ViewModel {
     }
     
     @org.jetbrains.annotations.NotNull
-    public final kotlinx.coroutines.flow.Flow<java.util.List<ascending.com.ascendingg.ui.viewmodel.InsightsViewModel.BarEntryData>> getHabitCompletionData() {
+    public final error.NonExistentClass getHabitCompletionData() {
         return null;
     }
     
     @org.jetbrains.annotations.NotNull
-    public final kotlinx.coroutines.flow.Flow<java.util.List<ascending.com.ascendingg.ui.viewmodel.InsightsViewModel.LineEntryData>> getStudyHoursData() {
+    public final error.NonExistentClass getStudyHoursData() {
         return null;
     }
     

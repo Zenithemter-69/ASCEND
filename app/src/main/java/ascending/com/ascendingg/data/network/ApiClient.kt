@@ -53,20 +53,18 @@ object ApiClient {
         )
 
         return suspendCoroutine { continuation ->
-            service.chatCompletion(requestBody).enqueue(object : retrofit2.Callback<ChatResponse> {
-                override fun onResponse(response: retrofit2.Response<ChatResponse>) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val content = response.body()!!.choices.firstOrNull()?.message?.content ?: "No response"
-                        continuation.resume(content)
-                    } else {
-                        continuation.resume("Error: ${response.code()} - ${response.message()}")
-                    }
+            // Execute synchronously within coroutine context
+            try {
+                val response = service.chatCompletion(requestBody).execute()
+                if (response.isSuccessful && response.body() != null) {
+                    val content = response.body()!!.choices.firstOrNull()?.message?.content ?: "No response"
+                    continuation.resume(content)
+                } else {
+                    continuation.resume("Error: ${response.code()} - ${response.message()}")
                 }
-
-                override fun onFailure(failure: Throwable) {
-                    continuation.resume("Network failure: ${failure.message}")
-                }
-            })
+            } catch (e: Exception) {
+                continuation.resume("Network failure: ${e.message}")
+            }
         }
     }
 

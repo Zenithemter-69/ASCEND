@@ -4,9 +4,9 @@ import ascending.com.ascendingg.data.database.AppDatabase
 import ascending.com.ascendingg.data.database.HabitEntity
 import ascending.com.ascendingg.data.model.Habit
 import androidx.lifecycle.LiveData
-import androidx.lifecycleFlowLiveDataConversionsKt
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toLiveData
+import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,13 +17,17 @@ class HabitRepository @Inject constructor(
     private val habitDao = database.habitDao()
 
     // Fetch all habits as LiveData (observed by ViewModel/HomeFragment)
-    fun getAllHabits(): LiveData<List<Habit>> = habitDao.getAllHabits()
+    val habits: LiveData<List<Habit>> = habitDao.getAllHabits()
         .map { it.map {
             Habit(
                 it.id, it.name, it.category, it.timeOfDay,
                 it.isActive, it.targetFrequency, it.completionStreak, it.lastCompleted
             )
-        } }.asFlow().toLiveData()
+        } }.stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
+        )
 
     // Insert a new habit (e.g., from UI creation flow)
     suspend fun addHabit(habit: HabitEntity) = habitDao.insertAll(arrayOf(habit))
