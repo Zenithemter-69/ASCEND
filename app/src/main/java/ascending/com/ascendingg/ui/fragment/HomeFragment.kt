@@ -5,15 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.progressindicator.CircularProgressIndicator
 import ascending.com.ascendingg.R
-import ascending.com.ascendingg.data.model.Habit
-import ascending.com.ascendingg.data.tracking.LocationTracker
 import ascending.com.ascendingg.databinding.FragmentHomeBinding
 import ascending.com.ascendingg.ui.adapter.HabitAdapter
 import ascending.com.ascendingg.ui.viewmodel.HomeViewModel
@@ -31,7 +25,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by viewModels()
     private lateinit var habitAdapter: HabitAdapter
-    private val locationTracker: LocationTracker by viewModels()
+    private lateinit var locationTracker: ascending.com.ascendingg.data.tracking.LocationTracker
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +37,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        locationTracker = ascending.com.ascendingg.data.tracking.LocationTracker(requireContext())
         setupRecyclerView()
         bindViewModel()
         setGreeting()
@@ -51,7 +46,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setupRecyclerView() {
         habitAdapter = HabitAdapter { habitId ->
-            viewModel.incrementStreak(habitId, System.currentTimeMillis())
+            viewModel.incrementStreak(habitId)
         }
         binding.habitsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -61,11 +56,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun bindViewModel() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.todaysHabits.collect { habits ->
-                    habitAdapter.submitList(habits)
-                    updateProgress(habits)
-                }
+            viewModel.todaysHabits.collect { habits ->
+                habitAdapter.submitList(habits)
+                updateProgress(habits)
             }
         }
     }
@@ -78,10 +71,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         // Update step count display periodically
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                locationTracker.currentLocation.collect { location ->
-                    updateStepDisplay()
-                }
+            locationTracker.currentLocation.collect { location ->
+                updateStepDisplay()
             }
         }
     }
@@ -93,14 +84,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.tvDistance.text = String.format("%.2f km", distanceKm)
     }
 
-    private fun updateProgress(habits: List<Habit>) {
+    private fun updateProgress(habits: List<ascending.com.ascendingg.data.model.Habit>) {
         val completed = habits.count { it.lastCompleted > 0 }
         val percentage = if (habits.isNotEmpty()) {
-            (completed * 100) / habits.size
-        } else 0
+            ((completed * 100) / habits.size).toFloat()
+        } else 0f
 
-        binding.progressRing.progress = percentage.toFloat()
-        binding.tvProgressText.text = "$percentage%"
+        binding.progressRing.progress = percentage
+        binding.tvProgressText.text = "${percentage.toInt()}%"
         binding.tvProgressLabel.text = "Habit Completion"
     }
 

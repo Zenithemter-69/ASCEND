@@ -50,7 +50,7 @@ class ChatViewHolder(private val binding: ItemChatMessageBinding) :
         binding.apply {
             tvMessage.text = message.text
             root.setBackgroundResource(
-                if (message.isUser) R.drawable.bg_user_message
+                if (message.isUser) R.color.black
                 else R.drawable.bg_ai_message
             )
         }

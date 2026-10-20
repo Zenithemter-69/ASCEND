@@ -26,7 +26,7 @@ class RoutineAdapter(
         val binding = ItemRoutineBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return RoutineViewHolder(binding)
+        return RoutineViewHolder(binding, onRoutineClick)
     }
 
     override fun onBindViewHolder(holder: RoutineViewHolder, position: Int) {
@@ -34,7 +34,7 @@ class RoutineAdapter(
     }
 }
 
-class RoutineViewHolder(private val binding: ItemRoutineBinding) :
+class RoutineViewHolder(private val binding: ItemRoutineBinding, private val onRoutineClick: (Long) -> Unit) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: RoutineItem) {
         binding.apply {

@@ -25,7 +25,7 @@ class HabitRepository @Inject constructor(
         } }.asLiveData()
 
     // Insert a new habit (e.g., from UI creation flow)
-    suspend fun addHabit(habit: HabitEntity) = habitDao.insertAll(habit)
+    suspend fun addHabit(habit: HabitEntity) = habitDao.insertAll(arrayOf(habit))
 
     // Update an existing habit (e.g., when completion state changes)
     suspend fun updateHabit(habit: HabitEntity) = habitDao.update(habit)

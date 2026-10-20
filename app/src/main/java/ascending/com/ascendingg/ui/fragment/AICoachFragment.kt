@@ -74,6 +74,9 @@ class AICoachFragment : Fragment(R.layout.fragment_aicoach) {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
+                        else -> {
+                            // Default case
+                        }
                     }
                 }
             }

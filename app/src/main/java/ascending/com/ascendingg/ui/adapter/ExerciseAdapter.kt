@@ -27,7 +27,7 @@ class ExerciseAdapter(
         val binding = ItemExerciseBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return ExerciseViewHolder(binding)
+        return ExerciseViewHolder(binding, onExerciseClick)
     }
 
     override fun onBindViewHolder(holder: ExerciseViewHolder, position: Int) {
@@ -35,7 +35,7 @@ class ExerciseAdapter(
     }
 }
 
-class ExerciseViewHolder(private val binding: ItemExerciseBinding) :
+class ExerciseViewHolder(private val binding: ItemExerciseBinding, private val onExerciseClick: (Long) -> Unit) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(exercise: Exercise) {
         binding.apply {

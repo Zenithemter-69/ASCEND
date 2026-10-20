@@ -22,5 +22,5 @@ class WorkoutRepository @Inject constructor(
             )
         } }.asLiveData()
 
-    suspend fun addWorkout(workout: WorkoutEntity) = workoutDao.insertAll(workout)
+    suspend fun addWorkout(workout: WorkoutEntity) = workoutDao.insertAll(arrayOf(workout))
 }
