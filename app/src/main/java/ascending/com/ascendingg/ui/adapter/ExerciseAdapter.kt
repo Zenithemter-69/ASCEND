@@ -49,7 +49,11 @@ class ExerciseViewHolder(private val binding: ItemExerciseBinding) :
                     else -> R.drawable.ic_fitness_center_24
                 }
             )
+            checkBoxCompleted.setOnCheckedChangeListener(null)
             checkBoxCompleted.isChecked = exercise.completed
+            checkBoxCompleted.setOnCheckedChangeListener { _, isChecked ->
+                // TODO: Update database state
+            }
         }
     }
 }
