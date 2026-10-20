@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ascending.com.ascendingg.data.utils.PreferencesManager
@@ -21,9 +20,6 @@ object ApiClient {
     private fun getRetrofit(context: Context): Retrofit {
         val prefs = PreferencesManager(context)
         val apiKey = prefs.getApiKey() ?: throw IllegalStateException("OpenAI API key not set")
-
-        val logging = HttpLoggingInterceptor { println(it) }
-        logging.level = HttpLoggingInterceptor.Level.BASIC
 
         val client = OkHttpClient.Builder()
             .addInterceptor { chain ->

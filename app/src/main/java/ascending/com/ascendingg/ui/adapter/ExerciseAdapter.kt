@@ -10,7 +10,7 @@ import ascending.com.ascendingg.databinding.ItemExerciseBinding
 import ascending.com.ascendingg.data.model.Exercise
 
 class ExerciseAdapter(
-    private val onExerciseClick: (Long) -> Unit
+    private val onExerciseClick: (Int) -> Unit
 ) : ListAdapter<Exercise, ExerciseViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -35,7 +35,7 @@ class ExerciseAdapter(
     }
 }
 
-class ExerciseViewHolder(private val binding: ItemExerciseBinding, private val onExerciseClick: (Long) -> Unit) :
+class ExerciseViewHolder(private val binding: ItemExerciseBinding, private val onExerciseClick: (Int) -> Unit) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(exercise: Exercise) {
         binding.apply {

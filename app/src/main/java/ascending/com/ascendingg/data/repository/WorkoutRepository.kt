@@ -4,8 +4,7 @@ import ascending.com.ascendingg.data.database.AppDatabase
 import ascending.com.ascendingg.data.database.WorkoutEntity
 import ascending.com.ascendingg.data.model.Workout
 import androidx.lifecycle.LiveData
-import kotlinx.coroutines.flow.asLiveData
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.toLiveData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,7 +19,7 @@ class WorkoutRepository @Inject constructor(
             Workout(
                 it.id, it.userId, it.type, it.duration, it.exercises, it.notes, it.timestamp
             )
-        } }.asLiveData()
+        } }.asFlow().toLiveData()
 
     suspend fun addWorkout(workout: WorkoutEntity) = workoutDao.insertAll(arrayOf(workout))
 }

@@ -9,7 +9,7 @@ import ascending.com.ascendingg.data.model.RoutineItem
 import ascending.com.ascendingg.databinding.ItemRoutineBinding
 
 class RoutineAdapter(
-    private val onRoutineClick: (Long) -> Unit
+    private val onRoutineClick: (Int) -> Unit
 ) : ListAdapter<RoutineItem, RoutineViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -34,7 +34,7 @@ class RoutineAdapter(
     }
 }
 
-class RoutineViewHolder(private val binding: ItemRoutineBinding, private val onRoutineClick: (Long) -> Unit) :
+class RoutineViewHolder(private val binding: ItemRoutineBinding, private val onRoutineClick: (Int) -> Unit) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(item: RoutineItem) {
         binding.apply {
