@@ -10,13 +10,12 @@ class AIRepository(private val context: Context) {
     private val prefs = PreferencesManager(context)
 
     suspend fun getAIResponse(message: String): String {
-        return withContext(Dispatchers.IO) {
-            // If no API key is configured, fall back to mock responses for demo
-            val apiKey = prefs.getApiKey()
-            return if (apiKey != null && apiKey.isNotEmpty()) {
-                // Real API call via OkHttp/Retrofit
-                ApiClient.getAiResponse(context, message)
-            } else {
+        // If no API key is configured, fall back to mock responses for demo
+        val apiKey = prefs.getApiKey()
+        return if (apiKey != null && apiKey.isNotEmpty()) {
+            // Real API call via OkHttp/Retrofit
+            ApiClient.getAiResponse(context, message)
+        } else {
                 // Mock responses for development/demo without API key
                 val lowerMsg = message.lowercase()
                 when {

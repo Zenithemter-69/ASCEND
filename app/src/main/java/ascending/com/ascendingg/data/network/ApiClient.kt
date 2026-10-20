@@ -1,16 +1,19 @@
 package ascending.com.ascendingg.data.network
 
+import android.content.Context
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import ascending.com.ascendingg.data.utils.PreferencesManager
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 object ApiClient {
 
     private const val BASE_URL = "https://api.openai.com/v1/"
 
-    private fun getRetrofit(context: android.content.Context): Retrofit {
+    private fun getRetrofit(context: Context): Retrofit {
         val prefs = PreferencesManager(context)
         val apiKey = prefs.getApiKey() ?: throw IllegalStateException("OpenAI API key not set")
 
@@ -34,7 +37,7 @@ object ApiClient {
             .build()
     }
 
-    fun getAiResponse(context: android.content.Context, message: String): String {
+    suspend fun getAiResponse(context: Context, message: String): String {
         val retrofit = getRetrofit(context)
         val service = retrofit.create(AiApiService::class.java)
 
@@ -49,7 +52,7 @@ object ApiClient {
                 }
 
                 override fun onFailure(failure: retrofit2.Failure) {
-                    continuation.resume("Network failure: ${failure.message}")
+                    continuation.resume("Network failure: ${failure.message()}")
                 }
             })
         }
