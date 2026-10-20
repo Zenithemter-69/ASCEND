@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import ascending.com.ascendingg.data.repository.HabitRepository
 import ascending.com.ascendingg.data.repository.WorkoutRepository
-import ascending.com.ascendingg.data.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -20,7 +19,7 @@ class InsightsViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Habit completion data for the last 7 days
-    val habitCompletionData = habitRepository.getAllHabits()
+    val habitCompletionData = habitRepository.habits
         .asFlow()
         .map { habits ->
             // Generate 7 days of habit completion percentages
@@ -39,7 +38,7 @@ class InsightsViewModel @Inject constructor(
         .distinctUntilChanged()
 
     // Study hours data for the last 7 days (from workouts/study tracking)
-    val studyHoursData = workoutRepository.getWorkouts(Constants.DEFAULT_USER_ID)
+    val studyHoursData = workoutRepository.workouts
         .asFlow()
         .map { workouts ->
             val sdf = SimpleDateFormat("EEE", Locale.getDefault())
@@ -51,7 +50,7 @@ class InsightsViewModel @Inject constructor(
                 val dayWorkouts = workouts.filter { w ->
                     val workoutDate = Date(w.timestamp)
                     SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(workoutDate) ==
-                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+                        SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
                 }
                 val totalMinutes = dayWorkouts.sumOf { it.duration }
                 val hours = totalMinutes / 60f
@@ -80,4 +79,3 @@ class InsightsViewModel @Inject constructor(
         val y: Float,
         val label: String
     )
-}
